@@ -1,13 +1,7 @@
 import { Router } from "express";
-import { ensureDataIsValidMiddleware } from "../middlewares/ensureDataIsValid.middleware";
-import {
-  userSchemaRequest,
-  userSchemaUpdateRequest,
-} from "../schemas/users.schemas";
-import {
-  ensureEmailExistsMiddleware,
-  ensureUserExistsMiddleware,
-} from "../middlewares/verify.middleware";
+import { userSchemaRequest } from "../schemas/users.schemas";
+import validated from "../middlewares/validated.middleware";
+import verify from "../middlewares/verify.middleware";
 import {
   createUserController,
   deleteUserController,
@@ -18,19 +12,8 @@ import {
 
 export const UserRouter: Router = Router();
 
-UserRouter.post(
-  "",
-  ensureDataIsValidMiddleware(userSchemaRequest),
-  ensureEmailExistsMiddleware,
-  createUserController
-);
+UserRouter.post("", validated.body(userSchemaRequest), verify.email, createUserController);
 UserRouter.get("", listUserController);
-UserRouter.get("/:id", ensureUserExistsMiddleware, retrieveUserController);
-UserRouter.patch(
-  "/:id",
-  ensureDataIsValidMiddleware(userSchemaUpdateRequest),
-  ensureUserExistsMiddleware,
-  ensureEmailExistsMiddleware,
-  updateUserController
-);
-UserRouter.delete("/:id", ensureUserExistsMiddleware, deleteUserController);
+UserRouter.get("/:id", verify.isUserExist, retrieveUserController);
+UserRouter.delete("/:id", validated.token, verify.isUserExist, deleteUserController);
+UserRouter.patch("/:id", validated.token, verify.isUserExist, updateUserController);

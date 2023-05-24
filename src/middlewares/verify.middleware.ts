@@ -4,11 +4,7 @@ import { User } from "../entities/user.entity";
 import { AppDataSource } from "../data-source";
 import { AppError } from "../error";
 
-export const ensureEmailExistsMiddleware = async (
-  req: Request,
-  res: Response,
-  next: NextFunction
-): Promise<void> => {
+const email = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const userRepository: Repository<User> = AppDataSource.getRepository(User);
 
   const findUserByEmail: User | null = await userRepository.findOneBy({
@@ -22,12 +18,9 @@ export const ensureEmailExistsMiddleware = async (
   return next();
 };
 
-export const ensureUserExistsMiddleware = async (
-  req: Request,
-  resp: Response,
-  next: NextFunction
-): Promise<void> => {
+const isUserExist = async (req: Request, res: Response, next: NextFunction): Promise<void> => {
   const userRepository: Repository<User> = AppDataSource.getRepository(User);
+  
   const userId = parseInt(req.params.id);
 
   const foundUser: User | null = await userRepository.findOneBy({
@@ -40,3 +33,5 @@ export const ensureUserExistsMiddleware = async (
 
   return next();
 };
+
+export default { email, isUserExist };
