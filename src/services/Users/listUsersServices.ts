@@ -13,3 +13,4 @@ export const listUsersServices = async (): Promise<TypeListUsersResponse> => {
 
   return usersValid;
 };
+
