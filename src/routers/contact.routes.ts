@@ -1,4 +1,7 @@
 import { Router } from "express";
+import { contactSchemaRequest } from "../schemas/contacts.schemas";
+import validated from "../middlewares/validated.middleware";
+import verify from "../middlewares/verify.middleware";
 import {
   createContactController,
   deleteContactController,
@@ -8,7 +11,9 @@ import {
 
 export const ContactRouter: Router = Router();
 
-ContactRouter.post("", createContactController);
+ContactRouter.use(validated.token)
+
+ContactRouter.post("", validated.body(contactSchemaRequest), verify.email, createContactController);
 ContactRouter.get("", listContactController);
-ContactRouter.patch("", updateContactController);
-ContactRouter.delete("", deleteContactController);
+ContactRouter.patch("/:id", verify.isContactOrOwner, updateContactController);
+ContactRouter.delete("/:id", verify.isContactOrOwner, deleteContactController);
