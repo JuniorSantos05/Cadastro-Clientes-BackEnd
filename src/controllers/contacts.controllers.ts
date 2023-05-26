@@ -4,6 +4,7 @@ import { createContactServices } from "../services/Contact/createContact.service
 import { listContactsServices } from "../services/Contact/listContacts.services";
 import { deleteContactServices } from "../services/Contact/deleteContact.services";
 import { updateContactServices } from "../services/Contact/updateContact.services";
+import { retrieveContactServices } from "../services/Contact/retrieveContact.services";
 
 export const createContactController = async (req: Request, res: Response): Promise<Response> => {
 
@@ -42,4 +43,13 @@ export const deleteContactController = async (req: Request, res: Response): Prom
   await deleteContactServices(contactId)
   
   return res.status(204).send();
+};
+
+export const retrieveContactController = async (req: Request, res: Response): Promise<Response> => {
+
+  const contactId = parseInt(req.params.id)
+
+  const contact: TContactResponse = await retrieveContactServices(contactId)
+
+  return res.status(200).json(contact);
 };
