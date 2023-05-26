@@ -5,7 +5,6 @@ import verify from "../middlewares/verify.middleware";
 import {
   createUserController,
   deleteUserController,
-  listUserController,
   retrieveUserController,
   updateUserController,
 } from "../controllers/users.controllers";
@@ -13,7 +12,6 @@ import {
 export const UserRouter: Router = Router();
 
 UserRouter.post("", validated.body(userSchemaRequest), verify.email, createUserController);
-UserRouter.get("", listUserController);
-UserRouter.get("/:id", verify.isUserExist, retrieveUserController);
-UserRouter.delete("/:id", validated.token, verify.isUserExist, deleteUserController);
-UserRouter.patch("/:id", validated.token, verify.isUserExist, updateUserController);
+UserRouter.get("/:id", validated.token, verify.isUserOrOwner, retrieveUserController);
+UserRouter.delete("/:id", validated.token, verify.isUserOrOwner, deleteUserController);
+UserRouter.patch("/:id", validated.token, verify.isUserOrOwner, updateUserController);

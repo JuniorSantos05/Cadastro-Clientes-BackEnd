@@ -12,6 +12,7 @@ import {
 
 @Entity("users")
 export class User {
+  
   @PrimaryGeneratedColumn("increment")
   id: number;
 

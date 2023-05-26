@@ -20,4 +20,3 @@ export const userSchemaResponse = userSchema.omit({
   password: true,
 });
 
-export const usersSchemaResponse = z.array(userSchemaResponse);

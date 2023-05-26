@@ -2,16 +2,16 @@ import { Repository } from "typeorm";
 import { User } from "../../entities/user.entity";
 import { AppDataSource } from "../../data-source";
 import { userSchemaResponse } from "../../schemas/users.schemas";
-import { TypeUserRequest, TypeUserResponse } from "../../interfaces/users.interfaces";
+import { TUserRequest, TUserResponse } from "../../interfaces/users.interfaces";
 
-export const createUserServices = async (data: TypeUserRequest): Promise<TypeUserResponse> => {
+export const createUserServices = async (payload: TUserRequest): Promise<TUserResponse> => {
   const userRepository: Repository<User> = AppDataSource.getRepository(User);
 
-  const newUser: User = userRepository.create(data);
+  const newUser: User = userRepository.create(payload);
 
   await userRepository.save(newUser);
 
-  const uservalid: TypeUserResponse = userSchemaResponse.parse(newUser);
+  const uservalid: TUserResponse = userSchemaResponse.parse(newUser);
 
   return uservalid;
 };
