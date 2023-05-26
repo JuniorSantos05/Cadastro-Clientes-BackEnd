@@ -6,6 +6,7 @@ import {
   createContactController,
   deleteContactController,
   listContactController,
+  retrieveContactController,
   updateContactController,
 } from "../controllers/contacts.controllers";
 
@@ -15,5 +16,8 @@ ContactRouter.use(validated.token)
 
 ContactRouter.post("", validated.body(contactSchemaRequest), verify.email, createContactController);
 ContactRouter.get("", listContactController);
+ContactRouter.get("/:id", verify.isContactOrOwner, retrieveContactController)
 ContactRouter.patch("/:id", verify.isContactOrOwner, updateContactController);
 ContactRouter.delete("/:id", verify.isContactOrOwner, deleteContactController);
+
+
